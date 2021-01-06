@@ -1,0 +1,22 @@
+
+
+button {
+  color: rgb(34, 101, 201);
+  background-color: white;
+  border: 1px solid  rgb(34, 101, 201);
+  border-radius: 10px;
+  margin:5px;
+
+
+  
+
+}
+  h1 {
+  
+    margin:5px;
+    display: flex;
+    color: rgb(34, 101, 201);
+    text-shadow: 1px 1px white;
+    font-size: 5vh;
+    font-weight: bold;
+  }
