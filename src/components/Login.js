@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useContext} from "react";
-import { useHistory, Link } from "react-router-dom";
+import React, { useState} from "react";
+import { useHistory} from "react-router";
 import Styled from "styled-components";
 import * as yup from "yup";
 import { axiosWithAuth } from "../axiosWithAuth";
+import schema from "./yupLoginValidation"
+import { Link } from "react-router-dom"
 
-import { useDispatch } from 'react-redux'
+// action
+
+import { loggedInStatus } from "../store/ticketsAction";
+import {useDispatch} from "react-redux"
 
 const LoginDiv = Styled.div`
 	display: flex;
@@ -81,13 +86,7 @@ h2 {
 }
 `;
 
-const formSchema = yup.object().shape({
-	username: yup.string().min(3, "Username must be at least 3 characters").required(),
-	password: yup
-		.string()
-		.min(6, "Password must be at least 6 characters")
-		.required("Password is required"),
-});
+
 
 const initialFormValues = {
 	username: "",
@@ -97,62 +96,64 @@ const initialErrors = {
 	username: "",
 	password: "",
 };
-const initDisabled = true;
+
 
 export default function Login()
 {
       const dispatch = useDispatch()
 	const [credentials, setCredentials] = useState(initialFormValues);
 	const [errors, setErrors] = useState(initialErrors);
-	const [buttonDisabled, setButtonDisabled] = useState(initDisabled);
-	const { push } = useHistory();
+	const [disabled, setDisabled] = useState(true);
+	let history = useHistory();
 
-	useEffect(() => {
-		formSchema.isValid(credentials).then((valid) => {
-			setButtonDisabled(!valid);
-		});
-	}, [credentials]);
+	const handleChange = (evt) =>
+    {
+        const { name, value } = evt.target;
+        validate(name, value);
+        setCredentials({ ...credentials, [name]: value });
+    };
 
-	const validateChange = (event) => {
-		yup
-			.reach(formSchema, event.target.name)
-			.validate(event.target.value)
-			.then(() => {
-				setErrors({
-					...errors,
-					[event.target.name]: "",
-				});
-			})
-			.catch((error) => {
-				setErrors({
-					...errors,
-					[event.target.name]: error.errors,
-				});
-			});
-	};
-
-	const handleChange = (event) => {
-		event.persist();
-		validateChange(event);
-		setCredentials({ ...credentials, [event.target.name]: event.target.value });
-	};
 
 	const onSubmit = (event) => {
 		event.preventDefault();
 		axiosWithAuth()
-			.post("/login", credentials)
+			.post("/api/auth/login", credentials)
 			.then((response) => {
 				localStorage.setItem("token", response.data.token);
-				push("/feed");
-				setCredentials(credentials.username);
-				setCredentials(initialFormValues);
-				ticket();
-			})
-			.catch((error) => {
-				// console.log("Error:", error.response.data);
-				alert(`Oops.. Looks like there was an error. ${error.response.data.message}`);
-			});
+                localStorage.setItem("organizer", true);
+                dispatch(loggedInStatus(true))
+                setCredentials(initialFormValues)
+                history.push("/my_tickets");
+            })
 	};
+	const validate = (name, value) =>
+    {
+        yup
+            .reach(schema, name)
+            .validate(value)
+            .then((valid) =>
+            {
+                setErrors({
+                    ...errors,
+                    [name]: "",
+                });
+                const submitBtnStyle = document.querySelector('#submit')
+                submitBtnStyle.classList.remove('disabled')
+                setDisabled(false)
+            })
+
+            .catch((err) =>
+            {
+                setErrors({
+                    ...errors,
+                    [name]: err.errors[0],
+                });
+                const submitBtnStyle = document.querySelector('#submit')
+                submitBtnStyle.classList.add('disabled')
+                setDisabled(true)
+            });
+    };
+	
 
 	return (
 		<LoginDiv>
@@ -165,7 +166,7 @@ export default function Login()
 					name="email"
 					placeholder="username or email"
 					value={credentials.username}
-					onChange={handleChange}
+				
 				/>
 				<br />
 				<div className="errors">
@@ -176,7 +177,7 @@ export default function Login()
 				<br />
 				<input
 					type="password"
-					name="passwzizkkord"
+					name="password"
 					placeholder="password"
 					value={credentials.password}
 					onChange={handleChange}
@@ -185,7 +186,7 @@ export default function Login()
 				<div className="errors">
 					<div className="titleError">{errors.password}</div>
 				</div>
-				<button disabled={buttonDisabled} name="submit">
+				<button disabled={disabled} name="submit">
 					Login
 				</button>
 				<Link className="sign-up-div" to="/">
