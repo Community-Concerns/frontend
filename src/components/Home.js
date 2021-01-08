@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 
 const StyledHome = styled.main`
-  background-color: #202C59;
+  background-color: white;
   padding: 2% 5%;
   min-height: 80vh;
  
@@ -16,7 +16,7 @@ function Home() {
     <StyledHome className="content-container">
     
     
-      <h2 className="get-started">Get Started!</h2>
+      <h2 className="get-started">Community Concerns</h2>
      
         
           <div className="link-container">

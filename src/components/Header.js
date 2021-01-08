@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { setLoggedStatus } from 
+import { loggedInStatus } from "../store/ticketAction"
 
 const StyledDiv = styled.div`
 max-width:100;
@@ -51,7 +51,7 @@ const StyledButton = styled.button`
   border-radius: 3px;
   @media (max-width: 500px) {
     padding: 0.2rem;
-  }:
+  }
 `;
 
 function Header({ isLoggedIn, setLoggedStatus }) {
@@ -59,7 +59,7 @@ function Header({ isLoggedIn, setLoggedStatus }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setLoggedStatus(false);
+    loggedInStatus(false);
     history.push("/login");
   };
 
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setLoggedStatus,
+  loggedInStatus,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Route, Switch } from 'react-router-dom'
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 
 //component imports
 import Header from './components/Header'
@@ -11,19 +11,39 @@ import Ticket from './components/Ticket'
 
 import AddTicket from './components/AddTicket'
 import Home from './components/Home'
+import { fetchTickets } from './store/ticketAction';
 
 
 
 
-function App() {
+
+
+function App()
+{
+  const dispatch = useDispatch()
+
+  const [
+    loggedIn, 
+    ticketList ]= useSelector(state => [
+      state.loggedIn,
+      state.ticketList])
+  
+  useEffect(() =>
+  {
+    
+    dispatch(fetchTickets())
+    
+  },[dispatch])
+  
   return (
     <div className="App">
       <Header />
+      loggedIn={loggedIn}
       <Switch>
-        <Route path="/register" component={Register} />
+        <Route exact path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route exact path="/" component={ Home } />
-            <PrivateRoute path="/add-ticket" component={AddTicket} />
+           
       </Switch>
     </div>
   );
