@@ -1,73 +1,109 @@
-import React from 'react'; 
-import { NavLink, useHistory } from 'react-router-dom'
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import { setLoggedStatus } from 
 
+const StyledDiv = styled.div`
+max-width:100;
+  background-image: url("");
+  height: 10vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  a:link {
+    text-decoration: none;
+  }
+  a:visited {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  a:active {
+    text-decoration: none;
+  }
+  @media (max-width: 500px) {
+    height: 5vh;
+  }
+`;
 
+const StyledText = styled.span`
+  background-color: green;
+  color: whitesmoke;
+  text-decoration: none;
+  padding: 0.4rem;
+  font-size: 20px;
+  border: 1px white solid;
+  border-radius: 3px;
+  @media (max-width: 500px) {
+    font-size: 0.8rem;
+  }
+`;
 
-// action
-import { loggedInStatus } from '../store/ticketsAction'
+const StyledButton = styled.button`
+  background-color: green;
+  color:whitesmoke;
+ text-decoration:none ; 
+  padding: .4rem;
+  font-size:20px;
+  border: 1px white solid;
+  border-radius: 3px;
+  @media (max-width: 500px) {
+    padding: 0.2rem;
+  }:
+`;
 
-// redux hook
-import { useDispatch } from 'react-redux'
-import { logDOM } from '@testing-library/react';
+function Header({ isLoggedIn, setLoggedStatus }) {
+  const history = useHistory();
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setLoggedStatus(false);
+    history.push("/login");
+  };
 
-
-function Header(props) {
-
-  const dispatch = useDispatch()
-  const history = useHistory()
-
-  return(
-    <Header>
-      {
-      !props.loggedIn ? 
-      <div className="header-container">
-   =
-        <div className="nav-container">
-          <nav>
-            <NavLink to="/login" activeClassName="active">Login</NavLink>
-            <NavLink to="/register" activeClassName="active">Register</NavLink>
-            <NavLink to="/" activeClassName="active">Join An Event</NavLink>
-          </nav>
-        </div>
-
-      </div> : ((!props.isOrganizer) ?
-      <div className="header-container">
-        <div className="logoContainer">
-        
-        </div>
-        <div className="nav-container">
-          <nav>
-            <NavLink to="/" activeClassName="active">New Ticket</NavLink>
-            <button className="logout-button" onClick={() => {
-                localStorage.removeItem('token')
-
-                history.push('/login')
-                dispatch(loggedInStatus(false))  
-            }}>Logout</button>
-          </nav>
-        </div>
-      </div> :
-      <div className="header-container">
-        <div className="logo">
-        
-        </div>
-        <div className="nav-container">
-          <nav>
-            <NavLink to="/tickets" activeClassName="active">Events</NavLink>
-
-            <NavLink to='/tickets' activeClassName='active'>Add Event</NavLink>
-            <button className="logout-button" onClick={() => {
-                localStorage.removeItem('token')
-                history.push('/login')
-                dispatch(loggedInStatus(false)) 
-            }}>Logout</button>
-          </nav>
-        </div>
-      </div>)
-      }
-    </Header>
-  )
+  return (
+    <div>
+      {isLoggedIn ? (
+        <StyledDiv>
+          <Link to='/dashboard'>
+            <StyledText>Dashboard</StyledText>
+          </Link>
+          <Link to='/add-plant'>
+            <StyledText>Add Plant</StyledText>
+          </Link>
+          <Link to='/account'>
+            <StyledText>Account</StyledText>
+          </Link>
+          <StyledButton onClick={handleLogout}>Logout</StyledButton>
+        </StyledDiv>
+      ) : (
+        <StyledDiv>
+          <Link to='/'>
+            <StyledText className={"navlink"}>Home</StyledText>
+          </Link>
+          <Link to='/about'>
+            <StyledText>About</StyledText>
+          </Link>
+          <Link to='/register'>
+            <StyledText>Register</StyledText>
+          </Link>
+          <Link to='/login'>
+            <StyledText>Login</StyledText>
+          </Link>
+        </StyledDiv>
+      )}
+    </div>
+  );
 }
 
- export default Header
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.isLoggedIn,
+});
+
+const mapDispatchToProps = {
+  setLoggedStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

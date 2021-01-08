@@ -4,6 +4,6 @@ body{
 .App{
   height: 100vh;
   display: flex;
-  background-image: url(https://www.activemind.de/wp-content/uploads/marketing.svg);
+  background-image: url(../../megaphone.svg);
   background-size: cover;
 } 

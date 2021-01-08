@@ -1,70 +1,64 @@
-import React, { useState } from 'react'
-import {useHistory} from 'react-router-dom'
-import styled from 'styled-components'
+import React from "react";
+import { Link } from "react-router-dom"
+import styled from "styled-components"
 
 // action
-import { addTicket } from '../store/ticketsAction'
+import { deleteTicket} from "../store/ticketAction"
 
-// Redux hook
+// redux hook
 import { useDispatch } from 'react-redux'
 
-const StyledTicket = styled.div` 
-background-color: #202C59;
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  `
 
-function AddEvent() {
+const StyledContainer = styled.div`
+  display: flex;
+  background-color: #202C59;
+  box-sizing: border-box;
+  padding: 5%;
+  min-height: 80vh;`
+
+
+function Ticket({ ticketList })
+{
 
   const dispatch = useDispatch()
 
-   const history = useHistory()
-   const [tickets, setTickets] = useState({
-      title: '',
-      description:'',
-      zipcode: '',
-    //   image: '',
-   })
+  const confirmTicket = (id) =>
+  {
+    const result = window.confirm('Please confirm that you would like to delete this ticket')
+    if (result)
+    {
+      dispatch(deleteTicket(id))
+    }
+  }
+  
 
-   const handleChange = (e) => {
-      setTickets({
-         ...tickets,
-         [e.target.name]: e.target.value,
-      })
-   }
-
-   const handleSubmit = (e) => {
-      e.preventDefault()
-
-      dispatch(addTicket(tickets))
-
-      history.push('/tickets')
-   }
+   
 
   return (
-    <StyledTicket>
-      <form onSubmit={handleSubmit}>
-        <h1>New Ticket</h1>
-        <div>
-          <input name='title' placeholder="" value={tickets.title} onChange={handleChange} />
-        </div>
-        <div>
-          <input name='description' placeholder="Please give a description" value={tickets.description} onChange={handleChange} />
-        </div>
-        <div>
-          <input name='zipcode' placeholder="Your Zipcode" value={tickets.zipcode} onChange={handleChange} />
-        </div>
-        {/* <div>
-          <input name='image' placeholder="Upload Image " value={events.location} onChange={handleChange} />
-        </div> */}
-        <div>
-          <button type='submit'>Submit Ticket</button>
-        </div>
-      </form>
-    </StyledTicket>
+    <StyledContainer>
+      {
+        
+        ticketList.length !== 0 ?
+          ticketList.map((eachTicket) => (
+            <div key={ eachTicket.id }>
+              <div className="title-container">{ eachTicket.title }
+                
+              </div>
+              
+              <Link to={ `/tickets/{$eachTicket.id }` }>View</Link>
+         <Link className="edit-button" to={`/tickets${eachTicket.id}`}>Edit</Link>
+              <div className="delete-button" onClick={()=> confirmTicket(eachTicket.id)}>Delete</div>
+            </div>
+             
+           
+          )) :
+          <div>
+            
+          </div>
+      }
+              </StyledContainer> 
+   
   )
 }
 
-export default AddEvent
+export default Ticket

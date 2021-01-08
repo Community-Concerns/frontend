@@ -2,12 +2,12 @@ const initialState = {
 
    loggedIn: localStorage.getItem('token'),
    isFetching: false,
-   submittedTickets: [],
+   ticketList: [],
    error: '',
 
 }
 
-export const eventReducer = (state = initialState, action) => {
+export const ticketReducer = (state = initialState, action) => {
 
    switch(action.type){
 
@@ -35,40 +35,40 @@ export const eventReducer = (state = initialState, action) => {
             })
          }
 
-      case 'ADD_EVENTS':
+      case 'ADD_TICKETS':
          return {
             ...state,
             isFetching: false,
-            eventList: [...state.eventList, action.payload],
+            ticketList: [...state.eventList, action.payload],
          }
-      case 'UPDATE_EVENTS':
+      case 'UPDATE_TICKETS':
          return {
             ...state,
             isFetching: false,
-            eventList: state.eventList.map(eachEvent => {
-               if(eachEvent.id === action.payload.id){
+            ticketList: state.ticketList.map(eachTicket => {
+               if(eachTicket.id === action.payload.id){
                   return action.payload
                } else {
-                  return eachEvent
+                  return eachTicket
                }
             }),
          }  
       
-      case 'REMOVE_EVENTS_FAILED':
+      case 'REMOVE_TICKETS_FAILED':
          return {
             ...state,
             isFetching: false,
             error: action.payload
          }
 
-      case 'ADD_EVENTS_FAILED':
+      case 'ADD_TICKETS_FAILED':
          return {
             ...state,
             isFetching: false,
             error: action.payload
          }
 
-      case 'UPDATE_EVENTS_FAILED':
+      case 'UPDATE_TICKETS_FAILED':
          return {
             ...state,
             isFetching: false,
@@ -80,11 +80,7 @@ export const eventReducer = (state = initialState, action) => {
             ...state,
             loggedIn: action.payload
          }
-      case 'IS_ORGANIZER':
-         return {
-            ...state,
-            isOrganizer: action.payload
-         }
+     
       
       default:
          return state

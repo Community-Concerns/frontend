@@ -1,4 +1,4 @@
-import { axiosWithAuth } from '../axiosWithAuth'
+import { axiosWithAuth } from '../auth/axiosWithAuth'
 
 export const fetchTickets = () => {
 
@@ -35,7 +35,7 @@ export const addTicket = (tickets) => {
 
 }
 
-export const deleteEvent = (id) => {
+export const deleteTicket = (id) => {
 
    return dispatch => {
 
@@ -43,7 +43,7 @@ export const deleteEvent = (id) => {
          .delete(`/api/tickets/${id}`)
          .then(res => {
             dispatch({
-               type: 'REMOVE_EVENTS', 
+               type: 'REMOVE_TICKETS', 
                payload: id
             })
          })
@@ -63,7 +63,7 @@ export const editTicket = (id, tickets) => {
          .then(res => {
             console.log(res)
             dispatch({
-               type: 'UPDATE_TICKETS',
+               type: 'EDIT_TICKETS',
                payload: res.data, 
             })
          })

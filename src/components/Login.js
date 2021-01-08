@@ -2,13 +2,13 @@ import React, { useState} from "react";
 import { useHistory} from "react-router";
 import Styled from "styled-components";
 import * as yup from "yup";
-import { axiosWithAuth } from "../axiosWithAuth";
+import { axiosWithAuth } from "../auth/axiosWithAuth";
 import schema from "./yupLoginValidation"
 import { Link } from "react-router-dom"
 
 // action
 
-import { loggedInStatus } from "../store/ticketsAction";
+import { loggedInStatus } from "../store/ticketAction";
 import {useDispatch} from "react-redux"
 
 const LoginDiv = Styled.div`
@@ -137,9 +137,7 @@ export default function Login()
                     ...errors,
                     [name]: "",
                 });
-                const submitBtnStyle = document.querySelector('#submit')
-                submitBtnStyle.classList.remove('disabled')
-                setDisabled(false)
+                
             })
 
             .catch((err) =>
