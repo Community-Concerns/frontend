@@ -89,11 +89,11 @@ h2 {
 
 
 const initialFormValues = {
-	username: "",
+	email: "",
 	password: "",
 };
 const initialErrors = {
-	username: "",
+	email: "",
 	password: "",
 };
 
@@ -131,13 +131,13 @@ export default function Login()
         yup
             .reach(schema, name)
             .validate(value)
-            .then((valid) =>
+            .then(() =>
             {
                 setErrors({
                     ...errors,
                     [name]: "",
                 });
-                
+                setDisabled(false)
             })
 
             .catch((err) =>
@@ -162,13 +162,13 @@ export default function Login()
 				<input
 					type="text"
 					name="email"
-					placeholder="username or email"
-					value={credentials.username}
-				
+					placeholder="email"
+					value={ credentials.email }
+					onChange={handleChange}
 				/>
 				<br />
 				<div className="errors">
-					<div className="titleError">{errors.username}</div>
+					<div className="titleError">{errors.email}</div>
 				</div>
 				<br />
 				<label htmlFor="zipcode"></label>
@@ -184,7 +184,7 @@ export default function Login()
 				<div className="errors">
 					<div className="titleError">{errors.password}</div>
 				</div>
-				<button disabled={disabled} name="submit">
+				<button disabled={disabled} name="submit" id="submit">
 					Login
 				</button>
 				<Link className="sign-up-div" to="/">

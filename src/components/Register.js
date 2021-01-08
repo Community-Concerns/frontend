@@ -36,7 +36,7 @@ function Register()
 
 	const [disabled, setDisabled] = useState(true)
 	const [errors, setErrors] = useState({
-		username: "", password: "", email: "", 
+		username: "", password: "", email: "", zipcode:"" 
 	})
 
 
@@ -71,8 +71,9 @@ const setFormErrors = (name, value) =>
 		(() =>
 	{
 		formSchema.isValid(registerValues).then((valid) =>
-		{
-			setDisabled(!valid);
+    {
+      console.log(valid)
+			setDisabled(valid);
 		});
 	}, [registerValues]);
 
@@ -84,8 +85,10 @@ const setFormErrors = (name, value) =>
 
     axiosWithAuth()
       .post('/api/auth/register', {
+        email: registerValues.email.trim(),
+        password: registerValues.password.trim(),
         username: registerValues.username.trim(),
-        password: registerValues.password.trim()
+        zipcode:registerValues.zipcode.trim()
       })
       .then(res => {
         localStorage.setItem('token', res.data.payload)
@@ -97,6 +100,8 @@ const setFormErrors = (name, value) =>
       setRegisterValues({
         username: '',
         password: '',
+        zipcode: '',
+        email:'' 
       })
   }
 
@@ -114,7 +119,7 @@ const setFormErrors = (name, value) =>
             <div className="error" style={ { color: "red" } }>{ errors.username }</div>
             <div>
               <input autoComplete="off" placeholder="Zip Code" name="zipcode" value={ registerValues.zipcode } onChange={ handleChange }/>
-                <div className="error" style={{ color: "red" }}>{errors.username}</div></div>
+                <div className="error" style={{ color: "red" }}>{errors.zipcode}</div></div>
             
                 <input autoComplete="off" name="password" placeholder="Password" type="password" value={registerValues.password} onChange={handleChange} />
                 <div className="error" style={{ color: "red" }}>{errors.password}</div>
