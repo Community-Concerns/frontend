@@ -36,7 +36,7 @@ function Register()
 
 	const [disabled, setDisabled] = useState(true)
 	const [errors, setErrors] = useState({
-		username: "", password: ""
+		username: "", password: "", email: "", 
 	})
 
 
@@ -106,10 +106,16 @@ const setFormErrors = (name, value) =>
             <form onSubmit={formSubmit}>
               <h1>Register</h1>
               <div>
-                <input autoComplete="off" placeholder="Username" name="username" value={registerValues.username} onChange={handleChange} />
-                <div className="error" style={{ color: "red" }}>{errors.username}</div>
-              </div>
-              <div> 
+                <input autoComplete="off" placeholder="Email" name="email" value={registerValues.email} onChange={handleChange} />
+                <div className="error" style={{ color: "red" }}>{errors.email}</div>
+          </div>
+          <div>
+            <input autoComplete="off" placeholder="Username" name="username" value={registerValues.username} onChange={handleChange} />
+            <div className="error" style={ { color: "red" } }>{ errors.username }</div>
+            <div>
+              <input autoComplete="off" placeholder="Zip Code" name="zipcode" value={ registerValues.zipcode } onChange={ handleChange }/>
+                <div className="error" style={{ color: "red" }}>{errors.username}</div></div>
+            
                 <input autoComplete="off" name="password" placeholder="Password" type="password" value={registerValues.password} onChange={handleChange} />
                 <div className="error" style={{ color: "red" }}>{errors.password}</div>
               </div>

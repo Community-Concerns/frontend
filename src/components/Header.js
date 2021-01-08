@@ -67,12 +67,12 @@ function Header({ isLoggedIn, setLoggedStatus }) {
     <div>
       {isLoggedIn ? (
         <StyledDiv>
-          <Link to='/dashboard'>
-            <StyledText>Dashboard</StyledText>
+          <Link to='/Home'>
+      
           </Link>
-          <Link to='/add-plant'>
-            <StyledText>Add Plant</StyledText>
-          </Link>
+       
+         
+          
           <Link to='/account'>
             <StyledText>Account</StyledText>
           </Link>
