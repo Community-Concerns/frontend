@@ -1,9 +1,0 @@
-body{
-  display: block;
-}
-.App{
-  height: 100vh;
-  display: flex;
-  background-image: url(../../megaphone.svg);
-  background-size: cover;
-} 
